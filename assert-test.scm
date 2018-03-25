@@ -54,10 +54,29 @@
     "expected:<false> but was:<true>"
     (assert-false #t))
 
-(test-case "assert-raise"
+(test-case "(assert-raise) on raise"
     (assert-raise
         'a
         (lambda () (raise 'a))))
 
-(ignored-test-case "ignored, else it would fail"
+(test-case "(assert-raise) on raise string"
+    (assert-raise
+        "a"
+        (lambda () (raise 'a))))
+
+(test-case "(assert-raise) on error"
+    (assert-raise
+        'a
+        (lambda () (error 'a))))
+
+(test-case "(assert-raise) on error string"
+    (assert-raise
+        "a"
+        (lambda () (error "a"))))
+
+(test-failure "(assert-raise) fails"
+    "Should raise a but got b"
+    (assert-raise 'a (lambda () (raise 'b))))
+
+(ignored-test-case "(ignored-test-case) is ignored, else it would fail"
     (assert-true #f))

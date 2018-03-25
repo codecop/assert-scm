@@ -7,7 +7,7 @@
 ; SchemeUnit from http://c2.com/cgi/wiki?SchemeUnit
 
 (define (fail msg)
-    (error (string-append "AssertionError: " msg)))
+    (error (string-append "AssertionError" ": " msg)))
 
 (define (check msg condition)
     (if (not condition) (fail msg)))
@@ -17,12 +17,14 @@
 
 ; extensions
 
-(define (expected-but-actial to-string expected actual)
+; private
+(define (expected-but-actual to-string expected actual)
     (string-append "expected:<" (to-string expected) "> but was:<" (to-string actual) ">"))
 
+; private
 (define (assert-generic-equal to-string eq-op expected actual)
     (assert
-        (expected-but-actial to-string expected actual)
+        (expected-but-actual to-string expected actual)
         (eq-op expected actual)))
 
 (define (assert= expected actual)
@@ -58,19 +60,21 @@
         ((list-equals-for eq-op) expected actual))
 )
 
-; (expected-but-actial to-string expected actual)
+; private
+(define (boolean->string b)
+    (if b "true" "false"))
 
 (define (assert-true actual)
-    (assert "expected:<true> but was:<false>" actual))
+    (assert (expected-but-actual boolean->string #t #f) actual))
 
 (define (assert-false actual)
-    (assert "expected:<false> but was:<true>" (not actual)))
+    (assert (expected-but-actual boolean->string #f #t) (not actual)))
 
 (define (assert-raise expected-ex body)
     (define (error-exception->string ex)
         (cond ((symbol? ex) (symbol->string ex))
               ((string? ex) ex)
-              ((error-exception? ex) (error-exception-message ex))
+              ((error-exception? ex) (error-exception->string (error-exception-message ex)))
               (else (error "Argument not symbol or string or exception -- ASSERT-RAISE" ex))))
     (let ((expected-message (error-exception->string expected-ex)))
         (lambda ()
