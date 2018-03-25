@@ -10,7 +10,7 @@
     (error (string-append "AssertionError" ": " msg)))
 
 (define (check msg condition)
-    (if (not condition) (fail msg)))
+    (if (not condition) (fail msg) #t))
 
 (define (assert msg condition)
     (lambda () (check msg condition)))
@@ -20,20 +20,21 @@
 ; private
 (define (make-string-message prefix to-string expected actual)
     (make-message prefix (to-string expected) (to-string actual)))
+
+; private
 (define (make-message prefix expected actual)
     (string-append prefix "expected:<" expected "> but was:<" actual ">"))
 
-; private
-(define (assert-generic-equal to-string eq-op expected actual)
+(define (assert-equal to-string eq-op expected actual)
     (assert
         (make-string-message "" to-string expected actual)
         (eq-op expected actual)))
 
 (define (assert= expected actual)
-    (assert-generic-equal number->string = expected actual))
+    (assert-equal number->string = expected actual))
 
 (define (assert-string= expected actual)
-    (assert-generic-equal values string=? expected actual))
+    (assert-equal values string=? expected actual))
 
 (define (assert-inexact= expected actual delta)
     (define (in-interval? center radius x)
@@ -45,21 +46,22 @@
         (in-interval? expected delta actual)))
 
 (define (assert-list= to-string eq-op expected-list actual-list)
-    (define (list-equals? i expected actual)
+    (define (item i)
+        (string-append (number->string i) ". item "))
+    (define (check-numbered i expected actual)
+        (check
+            (make-message (item i) (to-string expected) (to-string actual))
+            (eq-op expected actual)))
+
+    (define (check-list-element i expected actual)
         (cond ((and (null? expected) (null? actual)) #t)
-              ((null? expected) (fail (make-message (number->string i) "empty" "elements")))
-              ((null? actual) (fail (make-message (number->string i) "elements" "empty")))
-              (else
-                (let ((expected-1 (car expected))
-                      (actual-1 (car actual)))
-                    (cons ; dummy chaining
-                        (check
-                            (make-message  (string-append (number->string i) ". item ") (to-string expected-1) (to-string actual-1))
-                            (eq-op expected-1 actual-1))
-                        (list-equals? (+ i 1) (cdr expected) (cdr actual))))
-              )))
+              ((null? expected) (fail (make-message (item i) "no more elements" "more elements")))
+              ((null? actual)   (fail (make-message (item i) "more elements" "no more elements")))
+              (else (cons ; dummy chaining
+                        (check-numbered i (car expected) (car actual))
+                        (check-list-element (+ i 1) (cdr expected) (cdr actual))))))
     (lambda ()
-        (list-equals? 1 expected-list actual-list)))
+        (check-list-element 1 expected-list actual-list)))
 
 ; private
 (define (boolean->string b)

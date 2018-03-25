@@ -44,9 +44,16 @@
     "2. item expected:<3> but was:<2>"
     (assert-list= number->string = (list 1 3) (list 1 2)))
 
-; TODO
+(test-failure "(assert-list=) fails on short list"
+    "3. item expected:<more elements> but was:<no more elements>"
+    (assert-list= number->string = (list 1 2 3) (list 1 2)))
 
-(assert-list= values string=? (list "a") (list "a"))
+(test-failure "(assert-list=) fails on long list"
+    "2. item expected:<no more elements> but was:<more elements>"
+    (assert-list= number->string = (list 1) (list 1 2)))
+
+(test-case "(assert-list=) with strings"
+    (assert-list= values string=? (list "a") (list "a")))
 
 (test-case "(assert-true)"
     (assert-true #t))
