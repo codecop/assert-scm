@@ -34,11 +34,19 @@
     (assert-inexact= 1. 1.1 0.11))
 
 (test-failure "(assert-inexact=) fails"
-    "expected: in range <[.99-1.01]> but was:<1.1>"
+    "in range expected:<[.99-1.01]> but was:<1.1>"
     (assert-inexact= 1. 1.1 0.01))
 
-(assert-list= = "int" (list 1 2) (list 1 2))
-(assert-list= string=? "string" (list "a") (list "a"))
+(test-case "(assert-list=)"
+    (assert-list= = (list 1 2) (list 1 2)))
+
+;(test-failure "(assert-list=) fails on wrong element"
+;    "2. item expected:<3> but was:<2>"
+;    (assert-list= = (list 1 3) (list 1 2)))
+
+; TODO
+
+(assert-list= string=? (list "a") (list "a"))
 
 (test-case "(assert-true)"
     (assert-true #t))

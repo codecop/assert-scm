@@ -18,13 +18,13 @@
 ; extensions
 
 ; private
-(define (expected-but-actual to-string expected actual)
-    (string-append "expected:<" (to-string expected) "> but was:<" (to-string actual) ">"))
+(define (expected-but-actual prefix to-string expected actual)
+    (string-append prefix "expected:<" (to-string expected) "> but was:<" (to-string actual) ">"))
 
 ; private
 (define (assert-generic-equal to-string eq-op expected actual)
     (assert
-        (expected-but-actual to-string expected actual)
+        (expected-but-actual "" to-string expected actual)
         (eq-op expected actual)))
 
 (define (assert= expected actual)
@@ -34,30 +34,25 @@
     (assert-generic-equal values string=? expected actual))
 
 (define (assert-inexact= expected actual delta)
+    (define (in-interval? center radius x)
+        (<= (abs (- center x)) radius))
+    (define (interval->string center radius)
+        (string-append "[" (number->string (- center radius)) "-" (number->string (+ center radius)) "]"))
     (assert
-        (string-append "expected: in range <[" (number->string (- expected delta)) "-" (number->string (+ expected delta)) "]> but was:<" (number->string actual) ">")
-        (<= (abs (- expected actual)) delta)))
+        (expected-but-actual "in range " values (interval->string expected delta) (number->string actual))
+        (in-interval? expected delta actual)))
 
-(define (list-equals-for eq-op)
-    (define (list-equals? list1 list2)
-        (cond
-            ((null? list1)
-                (null? list2))
-            ((not (= (length list1) (length list2)))
-                #f)
-            ((not (eq-op (car list1) (car list2)))
-                #f)
-            (else
-                (list-equals? (cdr list1) (cdr list2)))
+(define (assert-list= eq-op expected actual)
+    (define (list-equals? i list1 list2)
+        (cond ((null? list1) (check "" (null? list2)))
+              ((not (= (length list1) (length list2))) #f)
+              ((not (eq-op (car list1) (car list2))) #f)
+              (else (list-equals? (+ i 1) (cdr list1) (cdr list2)))
         )
     )
-    list-equals?
-)
-
-(define (assert-list= eq-op msg expected actual)
     (assert
-        (string-append msg " lists not equal")
-        ((list-equals-for eq-op) expected actual))
+        (string-append " lists not equal")
+        (list-equals? 1 expected actual))
 )
 
 ; private
@@ -65,10 +60,10 @@
     (if b "true" "false"))
 
 (define (assert-true actual)
-    (assert (expected-but-actual boolean->string #t #f) actual))
+    (assert (expected-but-actual "" boolean->string #t #f) actual))
 
 (define (assert-false actual)
-    (assert (expected-but-actual boolean->string #f #t) (not actual)))
+    (assert (expected-but-actual "" boolean->string #f #t) (not actual)))
 
 (define (assert-raise expected-ex body)
     (define (error-exception->string ex)
@@ -77,15 +72,15 @@
               ((error-exception? ex) (error-exception->string (error-exception-message ex)))
               (else "")))
               ; (error "Argument not symbol or string or exception -- ASSERT-RAISE" ex)
-    (let ((expected-message (error-exception->string expected-ex)))
-        (lambda ()
-            (with-exception-catcher
-                (lambda (ex)
-                    (let ((actual-message (error-exception->string ex)))
-                        (check
-                            (string-append "raise " (expected-but-actual values expected-message actual-message))
-                            (string=? expected-message actual-message))))
-                (lambda () (fail (body)))))))
+    (lambda ()
+        (with-exception-catcher
+            (lambda (ex)
+                (let ((expected-message (error-exception->string expected-ex))
+                      (actual-message (error-exception->string ex)))
+                    (check
+                        (expected-but-actual "raise " error-exception->string expected-ex ex)
+                        (string=? expected-message actual-message))))
+            (lambda () (fail (body))))))
 
 (define (test-case name assertion)
     (display name)
