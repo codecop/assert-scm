@@ -38,15 +38,15 @@
     (assert-inexact= 1. 1.1 0.01))
 
 (test-case "(assert-list=)"
-    (assert-list= = (list 1 2) (list 1 2)))
+    (assert-list= number->string = (list 1 2) (list 1 2)))
 
-;(test-failure "(assert-list=) fails on wrong element"
-;    "2. item expected:<3> but was:<2>"
-;    (assert-list= = (list 1 3) (list 1 2)))
+(test-failure "(assert-list=) fails on wrong element"
+    "2. item expected:<3> but was:<2>"
+    (assert-list= number->string = (list 1 3) (list 1 2)))
 
 ; TODO
 
-(assert-list= string=? (list "a") (list "a"))
+(assert-list= values string=? (list "a") (list "a"))
 
 (test-case "(assert-true)"
     (assert-true #t))
