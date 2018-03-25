@@ -73,6 +73,12 @@
 (define (assert-false actual)
     (assert (make-string-message "" boolean->string #f #t) (not actual)))
 
+(define (assert-null actual)
+    (assert (make-message "" "null" "not null") (null? actual)))
+
+(define (assert-not-null actual)
+    (assert (make-message "" "not null" "null") (not (null? actual))))
+
 (define (assert-raise expected-ex body)
     (define (error-exception->string ex)
         (cond ((symbol? ex) (symbol->string ex))

@@ -69,6 +69,20 @@
     "expected:<false> but was:<true>"
     (assert-false #t))
 
+(test-case "(assert-null)"
+    (assert-null '()))
+
+(test-failure "(assert-null) fails"
+    "expected:<null> but was:<not null>"
+    (assert-null (list 1)))
+
+(test-case "(assert-not-null)"
+    (assert-not-null (list 1)))
+
+(test-failure "(assert-not-null) fails"
+    "expected:<not null> but was:<null>"
+    (assert-not-null '()))
+
 (test-case "(assert-raise) on raise"
     (assert-raise
         'a
