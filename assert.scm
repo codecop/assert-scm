@@ -28,10 +28,10 @@
 (define (assert-string= expected actual)
     (assert-generic-equal values string=? expected actual))
 
-(define (asserteq msg a b)
-    (assert msg (> 0.0001 (abs (- a b)))))
-
-; TODO values?
+(define (assert-inexact= expected actual delta)
+    (assert
+        (string-append "expected: in range <[" (number->string (- expected delta)) "-" (number->string (+ expected delta)) "]> but was:<" (number->string actual) ">")
+        (<= (abs (- expected actual)) delta)))
 
 (define (list-equals-for eq-op)
     (define (list-equals? list1 list2)

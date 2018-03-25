@@ -30,6 +30,13 @@
     "expected:<abc> but was:<123>"
     (assert-string= "abc" "123"))
 
+(test-case "(assert-inexact=) equals number"
+    (assert-inexact= 1. 1.1 0.11))
+
+(test-failure "(assert-inexact=) fails"
+    "expected: in range <[.99-1.01]> but was:<1.1>"
+    (assert-inexact= 1. 1.1 0.01))
+
 (assert-list= = "int" (list 1 2) (list 1 2))
 (assert-list= string=? "string" (list "a") (list "a"))
 
