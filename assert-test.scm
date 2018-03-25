@@ -13,8 +13,8 @@
     (lambda () (check "should not fail" #t)))
 
 (test-failure "(check) fails on #f condition"
-    "should fail"
-    (lambda () (check "should fail" #f)))
+    "message"
+    (lambda () (check "message" #f)))
 
 (test-case "(assert=) equals number"
     (assert= 1 1))
@@ -75,8 +75,12 @@
         (lambda () (error "a"))))
 
 (test-failure "(assert-raise) fails"
-    "Should raise a but got b"
+    "raise expected:<a> but was:<b>"
     (assert-raise 'a (lambda () (raise 'b))))
+
+(test-failure "(assert-raise) fails when no raise"
+    "raise expected:<a> but was:<>"
+    (assert-raise 'a (lambda () (+ 1 1))))
 
 (ignored-test-case "(ignored-test-case) is ignored, else it would fail"
     (assert-true #f))

@@ -75,15 +75,16 @@
         (cond ((symbol? ex) (symbol->string ex))
               ((string? ex) ex)
               ((error-exception? ex) (error-exception->string (error-exception-message ex)))
-              (else (error "Argument not symbol or string or exception -- ASSERT-RAISE" ex))))
+              (else "")))
+              ; (error "Argument not symbol or string or exception -- ASSERT-RAISE" ex)
     (let ((expected-message (error-exception->string expected-ex)))
         (lambda ()
             (with-exception-catcher
                 (lambda (ex)
                     (let ((actual-message (error-exception->string ex)))
-                     (check
-                        (string-append "Should raise " expected-message " but got " actual-message)
-                        (string=? expected-message actual-message))))
+                        (check
+                            (string-append "raise " (expected-but-actual values expected-message actual-message))
+                            (string=? expected-message actual-message))))
                 (lambda () (fail (body)))))))
 
 (define (test-case name assertion)
@@ -91,12 +92,10 @@
     (newline)
     (assertion)
     (display "OK")
-    (newline)
-)
+    (newline))
 
 (define (ignored-test-case name assertion)
     (display name)
     (newline)
     (display "IGNORED")
-    (newline)
-)
+    (newline))
