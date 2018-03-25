@@ -111,5 +111,9 @@
     "raise expected:<a> but was:<>"
     (assert-raise 'a (lambda () (+ 1 1))))
 
+(test-case "(test-case) allows several assertions"
+    (assert-false #f)
+    (assert-false #f))
+
 (ignored-test-case "(ignored-test-case) is ignored, else it would fail"
     (assert-true #f))

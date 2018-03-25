@@ -96,14 +96,14 @@
                         (string=? expected-message actual-message))))
             (lambda () (fail (body))))))
 
-(define (test-case name assertion)
+(define (test-case name . assertions)
     (display name)
     (newline)
-    (assertion)
+    (for-each (lambda (a) (a)) assertions)
     (display "OK")
     (newline))
 
-(define (ignored-test-case name assertion)
+(define (ignored-test-case name . assertions)
     (display name)
     (newline)
     (display "IGNORED")
