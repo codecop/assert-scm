@@ -1,26 +1,34 @@
 (include "assert.scm")
 
-(test-case "(fail) throws AssertionError with message"
-    (assert-raise "AssertionError: message"
-        (lambda () (fail "message"))))
+(define (test-failure name expected-message body)
+    (test-case name
+        (assert-raise (string-append "AssertionError: " expected-message)
+            body)))
 
-(check "(check) should not fail on #t condition" #t)
+(test-failure "(fail) throws AssertionError with message"
+    "message"
+    (lambda () (fail "message")))
 
-(test-case "(check) fails on #f condition"
-    (lambda ()
-        (with-exception-catcher
-            (lambda (ex)
-                 (check
-                    (string-append "Should raise AssertionError: should fail")
-                    (string=? "AssertionError: should fail" (error-exception-message ex))))
-            (lambda () (check "should fail" #f)))))
+(test-case "(check) should not fail on #t condition"
+    (lambda () (check "should not fail" #t)))
 
+(test-failure "(check) fails on #f condition"
+    "should fail"
+    (lambda () (check "should fail" #f)))
 
-(test-case "assert equals number"
+(test-case "(assert=) equals number"
     (assert= 1 1))
 
-(test-case "assert equals string"
+(test-failure "(assert=) fails"
+    "expected:<1> but was:<2>"
+    (assert= 1 2))
+
+(test-case "(assert-string=) equals string"
     (assert-string= "abc" "abc"))
+
+(test-failure "(assert-string=) fails"
+    "expected:<abc> but was:<123>"
+    (assert-string= "abc" "123"))
 
 (assert-list= = "int" (list 1 2) (list 1 2))
 (assert-list= string=? "string" (list "a") (list "a"))

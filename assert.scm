@@ -71,9 +71,10 @@
         (lambda ()
             (with-exception-catcher
                 (lambda (ex)
+                    (let ((actual-message (error-exception->string ex)))
                      (check
-                        (string-append "Should raise " expected-message)
-                        (string=? expected-message (error-exception->string ex))))
+                        (string-append "Should raise " expected-message " but got " actual-message)
+                        (string=? expected-message actual-message))))
                 (lambda () (fail (body)))))))
 
 (define (test-case name assertion)
