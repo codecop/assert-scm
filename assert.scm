@@ -17,9 +17,12 @@
 
 ; extensions
 
+(define (expected-but-actial to-string expected actual)
+    (string-append "expected:<" (to-string expected) "> but was:<" (to-string actual) ">"))
+
 (define (assert-generic-equal to-string eq-op expected actual)
     (assert
-        (string-append "expected:<" (to-string expected) "> but was:<" (to-string actual) ">")
+        (expected-but-actial to-string expected actual)
         (eq-op expected actual)))
 
 (define (assert= expected actual)
@@ -54,6 +57,8 @@
         (string-append msg " lists not equal")
         ((list-equals-for eq-op) expected actual))
 )
+
+; (expected-but-actial to-string expected actual)
 
 (define (assert-true actual)
     (assert "expected:<true> but was:<false>" actual))

@@ -40,11 +40,19 @@
 (assert-list= = "int" (list 1 2) (list 1 2))
 (assert-list= string=? "string" (list "a") (list "a"))
 
-(test-case "assert boolean #t"
+(test-case "(assert-true)"
     (assert-true #t))
 
-(test-case "assert boolean #f"
+(test-failure "(assert-true) fails"
+    "expected:<true> but was:<false>"
+    (assert-true #f))
+
+(test-case "(assert-false)"
     (assert-false #f))
+
+(test-failure "(assert-false) fails"
+    "expected:<false> but was:<true>"
+    (assert-false #t))
 
 (test-case "assert-raise"
     (assert-raise
