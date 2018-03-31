@@ -1,7 +1,11 @@
 ;
-; Unit test framework for scheme
+; Unit test framework for Scheme
 ; Copyright (c) 2017, Peter Kofler, http://www.code-cop.org/
 ; BSD licensed.
+;
+; Non S5RS used functions
+; * error from R6RS
+; * with-exception-catcher, error-exception?, error-exception-message from Gambit
 ;
 
 ; SchemeUnit from http://c2.com/cgi/wiki?SchemeUnit
