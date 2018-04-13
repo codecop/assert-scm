@@ -2,7 +2,8 @@
 
 (define (test-failure name expected-message body)
     (test-case name
-        (assert-raise (string-append "AssertionError: " expected-message)
+        (assert-raise
+            (string-append "AssertionError: " expected-message)
             body)))
 
 (test-failure "(fail) throws AssertionError with message"
@@ -52,8 +53,20 @@
     "2. item expected:<no more elements> but was:<more elements>"
     (assert-list= number->string = (list 1) (list 1 2)))
 
+(test-case "(assert-list=) recursive"
+    (assert-list= number->string = (list 1 (list 2 3)) (list 1 (list 2 3))))
+
+(test-failure "(assert-list=) recursive fails on wrong element type"
+    "2. item expected:<a sublist> but was:<no sublist>"
+    (assert-list= number->string = (list 1 (list 3)) (list 1 2)))
+
+(test-failure "(assert-list=) recursive fails on wrong element"
+    "22. item expected:<3> but was:<4>"
+    (assert-list= number->string = (list 1 (list 2 3)) (list 1 (list 2 4))))
+
 (test-case "(assert-list=) with strings"
-    (assert-list= values string=? (list "a") (list "a")))
+    (assert-list= values string=? (list "a") (list "a"))
+    (assert-string-list= (list "a") (list "a")))
 
 (test-case "(assert-true)"
     (assert-true #t))
