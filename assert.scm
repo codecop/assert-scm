@@ -6,8 +6,10 @@
 (include "assert-r5rs.scm")
 
 (define (-error->string ex)
-    (cond ((symbol? ex)                   (symbol->string ex))
+    (cond ((null? ex)                     "")
           ((string? ex)                   ex)
+          ((symbol? ex)                   (symbol->string ex))
+          ((list? ex)                     (string-append " (" (apply string-append (map -error->string ex)) ")"))
           ;; Gambit specific code
           ((error-exception? ex)          (-error->string (error-exception-message ex)))
           ((unbound-global-exception? ex) (-error->string (unbound-global-exception-variable ex))) ; variable name
