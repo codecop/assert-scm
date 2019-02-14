@@ -1,23 +1,19 @@
 ;;;
-;;; Unit test framework for Scheme R5RS, Chicken extension.
+;;; Unit test framework for Scheme R5RS, SRFI-12 extension (e.g. Chicken)
 ;;; Copyright (c) 2015, Peter Kofler, http://www.code-cop.org/
 ;;; BSD licensed.
 ;;;
 (include "assert-r5rs.scm")
 
 (define (-error->string ex)
-    (cond ((symbol? ex)                   (symbol->string ex))
-          ((string? ex)                   ex)
-          ;; Chicken specific code
-          ;; TODO Chicken Scheme exception types
-          ;; ((type-exception? ex)           (string-append "expected " (-error->string (type-exception-type-id ex)))) ; type name
-          ;; ((exn ex)           "xxx")
-          ;; see https://wiki.call-cc.org/man/4/Exceptions#exception-handlers
-          (else                  (pp ex)
-                                 "<unknown exception type>")))
+    (cond ((symbol? ex)    (symbol->string ex))
+          ((string? ex)    ex)
+          ;; SRFI-12/Chicken specific code
+          ((condition? ex) (-error->string ((condition-property-accessor 'exn 'message) ex)))
+          (else            "<unknown exception type>")))
 
 (define (-run-with-exception-handler handler body)
-    ;; Chicken specific code
+    ;; SRFI-12 specific code
     (let ((exn-message-comparison '()))
         (handle-exceptions exn
             (set! exn-message-comparison (handler exn))

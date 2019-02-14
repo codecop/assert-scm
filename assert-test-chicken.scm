@@ -37,7 +37,7 @@
     (assert-inexact= 1. 1.1 0.11))
 
 (test-failure "(assert-inexact=) fails"
-    "in range expected:<[.99-1.01]> but was:<1.1>"
+    "in range expected:<[0.99-1.01]> but was:<1.1>"
     (assert-inexact= 1. 1.1 0.01))
 
 (test-case "(assert-list=)"
@@ -124,12 +124,12 @@
     (assert-not-null '()))
 
 (test-case "(assert-raise) on raise symbol"
-    (assert-raise 'a (lambda ()
+    (assert-raise "unbound variable" (lambda ()
                          (raise 'a))))
 
 (test-case "(assert-raise) on raise string"
-    (assert-raise "a" (lambda ()
-                          (raise 'a))))
+    (assert-raise "unbound variable" (lambda ()
+                          (raise "a"))))
 
 (test-case "(assert-raise) on error symbol"
     (assert-raise 'a (lambda ()
@@ -140,7 +140,7 @@
                         (error "a"))))
 
 (test-failure "(assert-raise) fails"
-    "raise expected:<a> but was:<b>"
+    "raise expected:<a> but was:<unbound variable>"
     (assert-raise 'a (lambda ()
                         (raise 'b))))
 
@@ -150,11 +150,11 @@
                         (+ 1 1))))
 
 (test-case "(assert-raise) on unbound global variable"
-    (assert-raise 'unbound-global-variable (lambda ()
+    (assert-raise "unbound variable" (lambda ()
                         (unbound-global-variable))))
 
 (test-case "(assert-raise) on type error"
-    (assert-raise "expected number" (lambda ()
+    (assert-raise "bad argument type" (lambda ()
                                         (+ 1 "1"))))
 
 (test-case "(assert-all) allows several assertions"
