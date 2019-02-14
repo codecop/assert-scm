@@ -123,13 +123,13 @@
     "expected:<not null> but was:<null>"
     (assert-not-null '()))
 
-(test-case "(assert-raise) on raise symbol"
-    (assert-raise "unbound variable" (lambda ()
-                         (raise 'a))))
+(test-case "(assert-raise) on abort symbol"
+    (assert-raise "a" (lambda ()
+                         (abort 'a))))
 
-(test-case "(assert-raise) on raise string"
-    (assert-raise "unbound variable" (lambda ()
-                          (raise "a"))))
+(test-case "(assert-raise) on abort string"
+    (assert-raise "a" (lambda ()
+                          (abort "a"))))
 
 (test-case "(assert-raise) on error symbol"
     (assert-raise 'a (lambda ()
@@ -140,9 +140,9 @@
                         (error "a"))))
 
 (test-failure "(assert-raise) fails"
-    "raise expected:<a> but was:<unbound variable>"
+    "raise expected:<a> but was:<b>"
     (assert-raise 'a (lambda ()
-                        (raise 'b))))
+                        (abort 'b))))
 
 (test-failure "(assert-raise) fails when no raise"
     "raise expected:<a> but was:<no raise in body>"
@@ -150,11 +150,11 @@
                         (+ 1 1))))
 
 (test-case "(assert-raise) on unbound global variable"
-    (assert-raise "unbound variable" (lambda ()
+    (assert-raise "unbound variable (unbound-global-variable)" (lambda ()
                         (unbound-global-variable))))
 
 (test-case "(assert-raise) on type error"
-    (assert-raise "bad argument type" (lambda ()
+    (assert-raise "bad argument type (1)" (lambda ()
                                         (+ 1 "1"))))
 
 (test-case "(assert-all) allows several assertions"

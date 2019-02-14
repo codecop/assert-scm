@@ -6,11 +6,15 @@
 (include "assert-r5rs.scm")
 
 (define (-error->string ex)
-    (cond ((symbol? ex)    (symbol->string ex))
-          ((string? ex)    ex)
+    (cond ((null? ex)                     "")
+          ((string? ex)                   ex)
+          ((symbol? ex)                   (symbol->string ex))
+          ((list? ex)                     (string-append " (" (apply string-append (map -error->string ex)) ")"))
           ;; SRFI-12/Chicken specific code
-          ((condition? ex) (-error->string ((condition-property-accessor 'exn 'message) ex)))
-          (else            "<unknown exception type>")))
+          ((condition? ex)                (string-append (-error->string ((condition-property-accessor 'exn 'message) ex))
+                                                         (-error->string ((condition-property-accessor 'exn 'arguments) ex))))
+          (else                           (pp ex)
+                                          "<unknown exception type>")))
 
 (define (-run-with-exception-handler handler body)
     ;; SRFI-12 specific code
