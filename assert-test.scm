@@ -131,6 +131,14 @@
     (assert-raise "a" (lambda ()
                           (raise "a"))))
 
+(test-case "(assert-raise) on abort symbol"
+    (assert-raise 'a (lambda ()
+                         (abort 'a))))
+
+(test-case "(assert-raise) on abort string"
+    (assert-raise "a" (lambda ()
+                          (abort "a"))))
+
 (test-case "(assert-raise) on error symbol"
     (assert-raise 'a (lambda ()
                          (error 'a))))
