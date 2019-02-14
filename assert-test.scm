@@ -129,7 +129,7 @@
 
 (test-case "(assert-raise) on raise string"
     (assert-raise "a" (lambda ()
-                          (raise 'a))))
+                          (raise "a"))))
 
 (test-case "(assert-raise) on error symbol"
     (assert-raise 'a (lambda ()
