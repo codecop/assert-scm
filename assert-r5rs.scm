@@ -86,9 +86,12 @@
                                (number->string actual))
                 (-interval-inside? expected delta actual)))
 
-(define (assert-list-deep= to-string eq-op expected-list actual-list)
+(define (-make-message-item i expected actual)
     (define (item i)
         (string-append (number->string i) ". item "))
+    (-make-message (item i) expected actual))
+
+(define (assert-list-deep= to-string eq-op expected-list actual-list)
     (define (check-list-element i expected actual)
         (let* ((expected-l (length expected))
                (actual-l   (length actual))
@@ -96,10 +99,10 @@
                (has-more?  (> expected-l actual-l))
                (both-null? (and (null? expected) (null? actual))))
             (cond (both-null? -success-marker)
-                  (no-more?   (fail (-make-message (item (+ i expected-l))
+                  (no-more?   (fail (-make-message-item (+ i expected-l)
                                                    "no more elements"
                                                    "more elements")))
-                  (has-more?  (fail (-make-message (item (+ i actual-l))
+                  (has-more?  (fail (-make-message-item (+ i actual-l)
                                                    "more elements"
                                                    "no more elements")))
                   (else       (check-element i expected actual)))))
@@ -116,10 +119,10 @@
                                        (check-list-element (+ i 1)
                                                            (cdr expected)
                                                            (cdr actual))))
-                  (sublist?    (fail (-make-message (item i)
+                  (sublist?    (fail (-make-message-item i
                                                    "a sublist"
                                                    "no sublist")))
-                  (no-sublist? (fail (-make-message (item i)
+                  (no-sublist? (fail (-make-message-item i
                                                    "no sublist"
                                                    "a sublist")))
                   (else        (append ; dummy chaining
@@ -128,7 +131,7 @@
                                                            (cdr expected)
                                                            (cdr actual)))))))
     (define (check-numbered i expected actual)
-        (check (-make-message (item i)
+        (check (-make-message-item i
                              (to-string expected)
                              (to-string actual))
                (eq-op expected actual)))
