@@ -88,14 +88,42 @@
 
 (define (-make-message-numbered i expected actual)
     (define (item i)
-        (string-append (number->string i) ". item "))
-    (-make-message (item i) expected actual))
+        (string-append (number->string i)
+                       ". item "))
+    (-make-message (item i)
+                   expected
+                   actual))
 
 (define (-check-numbered= i to-string eq-op expected actual)
     (check (-make-message-numbered i
                                    (to-string expected)
                                    (to-string actual))
            (eq-op expected actual)))
+
+(define (assert-list= to-string eq-op expected-list actual-list)
+    (define (check-list-element i expected actual)
+        (let* ((expected-l (length expected))
+               (actual-l   (length actual))
+               (no-more?   (< expected-l actual-l))
+               (has-more?  (> expected-l actual-l))
+               (both-null? (and (null? expected) (null? actual))))
+            (cond (both-null? -success-marker)
+                  (no-more?   (fail (-make-message-numbered (+ i expected-l)
+                                                            "no more elements"
+                                                            "more elements")))
+                  (has-more?  (fail (-make-message-numbered (+ i actual-l)
+                                                            "more elements"
+                                                            "no more elements")))
+                  (else       (check-element i expected actual)))))
+    (define (check-element i expected actual)
+        (let* ((expected-element (car expected))
+               (actual-element   (car actual)))
+            (append (-check-numbered= i to-string eq-op expected-element actual-element)
+                    (check-list-element (+ i 1)
+                                        (cdr expected)
+                                        (cdr actual)))))
+    (lambda ()
+        (check-list-element 1 expected-list actual-list)))
 
 (define (assert-list-deep= to-string eq-op expected-list actual-list)
     (define (check-list-element i expected actual)
@@ -106,11 +134,11 @@
                (both-null? (and (null? expected) (null? actual))))
             (cond (both-null? -success-marker)
                   (no-more?   (fail (-make-message-numbered (+ i expected-l)
-                                                   "no more elements"
-                                                   "more elements")))
+                                                            "no more elements"
+                                                            "more elements")))
                   (has-more?  (fail (-make-message-numbered (+ i actual-l)
-                                                   "more elements"
-                                                   "no more elements")))
+                                                            "more elements"
+                                                            "no more elements")))
                   (else       (check-element i expected actual)))))
     (define (check-element i expected actual)
         (let* ((expected-element (car expected))
@@ -119,18 +147,14 @@
                (no-sublist?      (pair? actual-element))
                (both-pair?       (and sublist? no-sublist?)))
             (cond (both-pair?  (append ; dummy chaining
-                                       (check-list-element (+ (* i 10) 1)
+                                       (check-list-element (+ 1 (* i 10))
                                                            expected-element
                                                            actual-element)
                                        (check-list-element (+ i 1)
                                                            (cdr expected)
                                                            (cdr actual))))
-                  (sublist?    (fail (-make-message-numbered i
-                                                   "a sublist"
-                                                   "no sublist")))
-                  (no-sublist? (fail (-make-message-numbered i
-                                                   "no sublist"
-                                                   "a sublist")))
+                  (sublist?    (fail (-make-message-numbered i "a sublist" "no sublist")))
+                  (no-sublist? (fail (-make-message-numbered i "no sublist" "a sublist")))
                   (else        (append ; dummy chaining
                                        (-check-numbered= i to-string eq-op expected-element actual-element)
                                        (check-list-element (+ i 1)

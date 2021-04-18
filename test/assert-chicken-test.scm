@@ -40,58 +40,85 @@
     "in range expected:<[0.99-1.01]> but was:<1.1>"
     (assert-inexact= 1. 1.1 0.01))
 
-(test-case "(assert-list-deep=)"
-    (assert-list-deep= number->string
+(test-case "(assert-list=)"
+    (assert-list= number->string
                   =
                   (list 1 2)
                   (list 1 2)))
 
-(test-failure "(assert-list-deep=) fails on wrong element"
+(test-failure "(assert-list=) fails on wrong element"
     "2. item expected:<3> but was:<2>"
-    (assert-list-deep= number->string
+    (assert-list= number->string
                   =
                   (list 1 3)
                   (list 1 2)))
 
-(test-failure "(assert-list-deep=) fails on short list"
+(test-failure "(assert-list=) fails on short list"
     "3. item expected:<more elements> but was:<no more elements>"
-    (assert-list-deep= number->string
+    (assert-list= number->string
                   =
                   (list 1 2 3)
                   (list 1 2)))
 
-(test-failure "(assert-list-deep=) fails on long list"
+(test-failure "(assert-list=) fails on long list"
     "2. item expected:<no more elements> but was:<more elements>"
-    (assert-list-deep= number->string
+    (assert-list= number->string
                   =
                   (list 1)
                   (list 1 2)))
 
+(test-case "(assert-list-deep=)"
+    (assert-list-deep= number->string
+                       =
+                       (list 1 2)
+                       (list 1 2)))
+
+(test-failure "(assert-list-deep=) fails on wrong element"
+    "2. item expected:<3> but was:<2>"
+    (assert-list-deep= number->string
+                       =
+                       (list 1 3)
+                       (list 1 2)))
+
+(test-failure "(assert-list-deep=) fails on short list"
+    "3. item expected:<more elements> but was:<no more elements>"
+    (assert-list-deep= number->string
+                       =
+                       (list 1 2 3)
+                       (list 1 2)))
+
+(test-failure "(assert-list-deep=) fails on long list"
+    "2. item expected:<no more elements> but was:<more elements>"
+    (assert-list-deep= number->string
+                       =
+                       (list 1)
+                       (list 1 2)))
+
 (test-case "(assert-list-deep=) recursive"
     (assert-list-deep= number->string
-                  =
-                  (list 1 (list 2 3))
-                  (list 1 (list 2 3))))
+                       =
+                       (list 1 (list 2 3))
+                       (list 1 (list 2 3))))
 
 (test-failure "(assert-list-deep=) recursive fails on wrong element type"
     "2. item expected:<a sublist> but was:<no sublist>"
     (assert-list-deep= number->string
-                  =
-                  (list 1 (list 3))
-                  (list 1 2)))
+                       =
+                       (list 1 (list 3))
+                       (list 1 2)))
 
 (test-failure "(assert-list-deep=) recursive fails on wrong element"
     "22. item expected:<3> but was:<4>"
     (assert-list-deep= number->string
-                  =
-                  (list 1 (list 2 3))
-                  (list 1 (list 2 4))))
+                       =
+                       (list 1 (list 2 3))
+                       (list 1 (list 2 4))))
 
 (test-case "(assert-list-deep=) with strings"
     (assert-list-deep= values
-                  string=?
-                  (list "a")
-                  (list "a"))
+                       string=?
+                       (list "a")
+                       (list "a"))
     (assert-string-list= (list "a")
                          (list "a")))
 
@@ -125,7 +152,7 @@
 
 (test-case "(assert-raise) on abort symbol"
     (assert-raise "a" (lambda ()
-                         (abort 'a))))
+                          (abort 'a))))
 
 (test-case "(assert-raise) on abort string"
     (assert-raise "a" (lambda ()
@@ -137,38 +164,36 @@
 
 (test-case "(assert-raise) on error string"
     (assert-raise "a" (lambda ()
-                        (error "a"))))
+                          (error "a"))))
 
 (test-failure "(assert-raise) fails"
     "raise expected:<a> but was:<b>"
     (assert-raise 'a (lambda ()
-                        (abort 'b))))
+                         (abort 'b))))
 
 (test-failure "(assert-raise) fails when no raise"
     "raise expected:<a> but was:<no raise in body>"
     (assert-raise 'a (lambda ()
-                        (+ 1 1))))
+                         (+ 1 1))))
 
 (test-case "(assert-raise) on unbound global variable"
     (assert-raise "unbound variable (unbound-global-variable)" (lambda ()
-                        (unbound-global-variable))))
+                                                                   (unbound-global-variable))))
 
 (test-case "(assert-raise) on type error"
     (assert-raise "bad argument type (1)" (lambda ()
-                                        (+ 1 "1"))))
+                                              (+ 1 "1"))))
 
 (test-case "(assert-all) allows several assertions"
-    (assert-all
-        (assert-true #t)
-        (assert-true #t)))
+    (assert-all (assert-true #t)
+                (assert-true #t)))
 
 (test-failure "(assert-all) evals all assertions"
     "expected:<true> but was:<false>"
     (lambda ()
         (test-case "- inside assert-all"
-            (assert-all
-                (assert-true #t)
-                (assert-true #f)))))
+            (assert-all (assert-true #t)
+                        (assert-true #f)))))
 
 (test-case "(test-case) allows several assertions"
     (assert-true #t)
