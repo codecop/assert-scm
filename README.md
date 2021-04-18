@@ -9,4 +9,4 @@ There are several assertions available, e.g. `(assert=)` for numbers, `(assert-s
 
 To run the self-test:
 
-    gsi assert-test.scm
+    gsi test/assert-test.scm
