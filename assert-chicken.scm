@@ -18,7 +18,7 @@
 
 (define (-run-with-exception-handler handler body)
     ;; SRFI-12 specific code
-    (let ((exn-message-comparison '()))
+    (let ((exn-message-comparison (list)))
         (handle-exceptions exn
             (set! exn-message-comparison (handler exn))
             (body))

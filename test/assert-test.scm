@@ -110,7 +110,7 @@
     (assert-false #t))
 
 (test-case "(assert-null)"
-    (assert-null '()))
+    (assert-null (list)))
 
 (test-failure "(assert-null) fails"
     "expected:<null> but was:<not null>"
@@ -121,7 +121,7 @@
 
 (test-failure "(assert-not-null) fails"
     "expected:<not null> but was:<null>"
-    (assert-not-null '()))
+    (assert-not-null (list)))
 
 (test-case "(assert-raise) on raise symbol"
     (assert-raise 'a (lambda ()
