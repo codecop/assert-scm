@@ -86,7 +86,7 @@
                                (number->string actual))
                 (-interval-inside? expected delta actual)))
 
-(define (assert-list= to-string eq-op expected-list actual-list)
+(define (assert-list-deep= to-string eq-op expected-list actual-list)
     (define (item i)
         (string-append (number->string i) ". item "))
     (define (check-list-element i expected actual)
@@ -136,10 +136,10 @@
         (check-list-element 1 expected-list actual-list)))
 
 (define (assert-string-list= expected-list actual-list)
-    (assert-list= values string=? expected-list actual-list))
+    (assert-list-deep= values string=? expected-list actual-list))
 
 (define (assert-number-list= expected-list actual-list)
-    (assert-list= number->string = expected-list actual-list))
+    (assert-list-deep= number->string = expected-list actual-list))
 
 ;; private or library function
 (define (-boolean->string b)
