@@ -1,0 +1,9 @@
+# VS Code
+.vscode
+.tags
+
+# UltraEdit
+**/*.bak
+*.prj
+*.pui
+tags.lst
