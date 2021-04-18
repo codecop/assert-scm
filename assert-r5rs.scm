@@ -1,13 +1,12 @@
 ;;;
 ;;; Unit test framework for Scheme R5RS.
-;;; Copyright (c) 2015, Peter Kofler, http://www.code-cop.org/
+;;; Copyright (c) 2015, Peter Kofler, https://www.code-cop.org/
 ;;; BSD licensed.
 ;;;
 ;;; Non R5RS used functions
 ;;; * error from SRFI 23, available in Gambit, Chicken.
 ;;;
 
-;; SchemeUnit from http://c2.com/cgi/wiki?SchemeUnit
 ;; @formatter:align_list_of_strings:False
 
 (define (fail msg)

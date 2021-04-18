@@ -1,6 +1,6 @@
 ;;;
 ;;; Unit test framework for Scheme R5RS, Gambit extension.
-;;; Copyright (c) 2015, Peter Kofler, http://www.code-cop.org/
+;;; Copyright (c) 2015, Peter Kofler, https://www.code-cop.org/
 ;;; BSD licensed.
 ;;;
 (include "assert-r5rs.scm")
