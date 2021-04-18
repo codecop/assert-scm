@@ -1,7 +1,8 @@
 ;;;
 ;;; Ansi terminal colours.
+;;; https://github.com/codecop/assert-scm
+;;; Copyright (c) 2015, Peter Kofler, BSD 3-Clause License
 ;;;
-
 (define ansi-black "30")
 (define ansi-red "31")
 (define ansi-green "32")

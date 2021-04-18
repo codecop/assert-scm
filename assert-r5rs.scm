@@ -1,7 +1,7 @@
 ;;;
-;;; Unit test framework for Scheme R5RS.
-;;; Copyright (c) 2015, Peter Kofler, https://www.code-cop.org/
-;;; BSD licensed.
+;;; assert-scm - Minimalist xUnit test framework for Scheme R5RS.
+;;; https://github.com/codecop/assert-scm
+;;; Copyright (c) 2015, Peter Kofler, BSD 3-Clause License
 ;;;
 ;;; Non R5RS used functions
 ;;; * error from SRFI 23, available in Gambit, Chicken.
