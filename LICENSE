@@ -1,6 +1,6 @@
 BSD 3-Clause License
 
-ApprovalTests.c - Approval Tests for C99.
+assert-scm - Minimalist xUnit test framework for Scheme R5RS.
 Copyright (c) 2015, Peter Kofler
 All rights reserved.
 
