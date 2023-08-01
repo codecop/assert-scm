@@ -1,5 +1,5 @@
 ;;;
-;;; assert-scm - Minimalist xUnit test framework for Scheme R5RS, SRFI-12 extension (e.g. Chicken).
+;;; assert-scm - Minimalist xUnit test framework for Scheme R5RS, SRFI-12 extension (e.g. Chicken 4).
 ;;; https://github.com/codecop/assert-scm
 ;;; Copyright (c) 2015, Peter Kofler, BSD 3-Clause License
 ;;;

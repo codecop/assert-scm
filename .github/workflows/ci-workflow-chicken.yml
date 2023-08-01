@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   chicken_build_linux:
     runs-on: ubuntu-latest
+    if: ${{ false }}  # Chicken 5 is not supported
     steps:
     - name: Check out the repo
       uses: actions/checkout@v3
@@ -12,8 +13,7 @@ jobs:
     - name: Install Chicken
       run: |
         sudo apt-get update
-        sudo apt-cache policy chicken-bin
-        sudo apt-get -y install chicken-bin=4.13.0
+        sudo apt-get -y install chicken-bin
 
     - name: Test
       run: csi -r5rs-syntax -q -b -I test ./test/assert-chicken-test.scm
@@ -21,7 +21,7 @@ jobs:
     - name: Test the example
       run: csi -r5rs-syntax -q -b -I sample ./sample/sample-unit-test.scm
 
-  chicken_build_windows:
+  chicken_build_windows_4:
     runs-on: windows-latest
     steps:
     - name: Check out the repo
@@ -32,8 +32,22 @@ jobs:
 
     - name: Test
       run: C:\chicken\bin\csi -r5rs-syntax -q -b -I test test\assert-chicken-test.scm
-      # run: C:\tools\chicken\bin\csi -r5rs-syntax -q -b -I test test\assert-chicken-test.scm
 
     - name: Test the example
       run: C:\chicken\bin\csi -r5rs-syntax -q -b -I sample sample\sample-unit-test.scm
-      # run: C:\tools\chicken\bin\csi -r5rs-syntax -q -b -I sample sample\sample-unit-test.scm
+
+  chicken_build_windows:
+    runs-on: windows-latest
+    if: ${{ false }}  # Chicken 5 is not supported
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+
+    - name: Install Chicken
+      run: choco install chicken
+
+    - name: Test
+      run: C:\tools\chicken\bin\csi -r5rs-syntax -q -b -I test test\assert-chicken-test.scm
+
+    - name: Test the example
+      run: C:\tools\chicken\bin\csi -r5rs-syntax -q -b -I sample sample\sample-unit-test.scm
