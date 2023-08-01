@@ -1,0 +1,39 @@
+name: CI Workflow Scheme Chicken
+
+on: [push, pull_request]
+
+jobs:
+  chicken_build_linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+
+    - name: Install Chicken
+      run: |
+        sudo apt-get update
+        sudo apt-cache policy chicken-bin
+        sudo apt-get -y install chicken-bin=4.13.0
+
+    - name: Test
+      run: csi -r5rs-syntax -q -b -I test ./test/assert-chicken-test.scm
+
+    - name: Test the example
+      run: csi -r5rs-syntax -q -b -I sample ./sample/sample-unit-test.scm
+
+  chicken_build_windows:
+    runs-on: windows-latest
+    steps:
+    - name: Check out the repo
+      uses: actions/checkout@v3
+
+    - name: Install Chicken
+      run: choco install chicken --version 4.13.0
+
+    - name: Test
+      run: C:\chicken\bin\csi -r5rs-syntax -q -b -I test test\assert-chicken-test.scm
+      # run: C:\tools\chicken\bin\csi -r5rs-syntax -q -b -I test test\assert-chicken-test.scm
+
+    - name: Test the example
+      run: C:\chicken\bin\csi -r5rs-syntax -q -b -I sample sample\sample-unit-test.scm
+      # run: C:\tools\chicken\bin\csi -r5rs-syntax -q -b -I sample sample\sample-unit-test.scm

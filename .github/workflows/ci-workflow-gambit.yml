@@ -3,7 +3,7 @@ name: CI Workflow Scheme Gambit
 on: [push, pull_request]
 
 jobs:
-  build_linux:
+  gambit_build_linux:
     runs-on: ubuntu-latest
     steps:
     - name: Check out the repo
@@ -20,7 +20,7 @@ jobs:
     - name: Test the example
       run: gsi ./sample/sample-unit-test.scm
 
-  build_windows:
+  gambit_build_windows:
     runs-on: windows-latest
     steps:
     - name: Check out the repo
