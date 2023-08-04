@@ -34,3 +34,6 @@ jobs:
 
     - name: Test the example
       run: gsi.exe sample\sample-unit-test.scm
+
+    - name: Test the prime factors
+      run: gsi.exe sample\prime-factors-test.scm
