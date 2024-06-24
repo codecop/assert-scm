@@ -248,3 +248,10 @@
     "3. item expected:<3> but was:<x>"
     (assert-string-list= '("1" ("2") "3" )
                          '("1" ("2") "x" )))
+
+(test-case "(assert-symbol=) equals symbol"
+    (assert-symbol= 'foo 'foo))
+
+(test-failure "(assert-symbol=) fails"
+    "expected:<foo> but was:<bar>"
+    (assert-symbol= 'foo 'bar))
