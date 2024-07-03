@@ -62,7 +62,7 @@
     (assert-equal number->string = expected actual))
 
 (define (assert-symbol= expected actual)
-    (assert-equal symbol->string symbol=? expected actual))
+    (assert-equal symbol->string eq? expected actual))
 
 (define (assert-string= expected actual)
     (assert-equal values string=? expected actual))
